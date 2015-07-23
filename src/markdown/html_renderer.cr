@@ -97,7 +97,7 @@ class Markdown::HTMLRenderer
   end
 
   def text(text)
-    @io << text.gsub('<', "&lt;")
+    @io << text
   end
 
   def horizontal_rule
