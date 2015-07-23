@@ -18,6 +18,10 @@ class Markdown::Parser
       return
     end
 
+    if line.starts_with? "    "
+      return render_code
+    end
+
     if is_horizontal_rule? line
       return render_horizontal_rule
     end
@@ -33,10 +37,6 @@ class Markdown::Parser
     pounds = count_pounds line
     if pounds
       return render_prefix_header pounds, line
-    end
-
-    if line.starts_with? "    "
-      return render_code
     end
 
     if starts_with_bullet_marker? line
