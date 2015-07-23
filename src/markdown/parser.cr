@@ -18,6 +18,10 @@ class Markdown::Parser
       return
     end
 
+    if is_horizontal_rule? line
+      return render_horizontal_rule
+    end
+
     if next_line_is_all?('=')
       return render_header 1, line, 2
     end
@@ -33,10 +37,6 @@ class Markdown::Parser
 
     if line.starts_with? "    "
       return render_code
-    end
-
-    if is_horizontal_rule? line
-      return render_horizontal_rule
     end
 
     if starts_with_bullet_marker? line
