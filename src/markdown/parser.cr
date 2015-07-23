@@ -126,6 +126,7 @@ class Markdown::Parser
       newline
     end
 
+    newline
     @renderer.end_code
 
     append_double_newline_if_has_more
