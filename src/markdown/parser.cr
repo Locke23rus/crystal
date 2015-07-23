@@ -39,7 +39,7 @@ class Markdown::Parser
       return render_horizontal_rule
     end
 
-    if starts_with_star? line
+    if starts_with_bullet_marker? line
       return render_unordered_list
     end
 
@@ -185,10 +185,11 @@ class Markdown::Parser
         next
       end
 
-      break unless starts_with_star? line
+      marker = bullet_marker line
+      break unless marker
 
       @renderer.begin_list_item
-      process_line line.byte_slice(line.index('*').not_nil! + 1)
+      process_line line.byte_slice(line.index(marker).not_nil! + 1)
       @renderer.end_list_item
       @line += 1
 
@@ -468,6 +469,35 @@ class Markdown::Parser
 
     return false unless pos < bytesize
     str[pos].chr.whitespace?
+  end
+
+  def bullet_marker(line)
+    marker = nil
+
+    line.each_char do |char|
+      if marker
+        if char.whitespace?
+          return marker
+        else
+          return nil
+        end
+      end
+
+      next if char.whitespace?
+
+      case char
+      when '*', '+', '-'
+        marker = char
+      else
+        return nil
+      end
+    end
+
+    nil
+  end
+
+  def starts_with_bullet_marker?(line)
+    !bullet_marker(line).nil?
   end
 
   def starts_with_backticks?(line)
