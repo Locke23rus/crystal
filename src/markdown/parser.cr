@@ -22,6 +22,10 @@ class Markdown::Parser
       return render_code
     end
 
+    if starts_with_backticks? line
+      return render_fenced_code
+    end
+
     if is_horizontal_rule? line
       return render_horizontal_rule
     end
@@ -41,10 +45,6 @@ class Markdown::Parser
 
     if starts_with_bullet_marker? line
       return render_unordered_list
-    end
-
-    if starts_with_backticks? line
-      return render_fenced_code
     end
 
     if starts_with_digits_dot? line
